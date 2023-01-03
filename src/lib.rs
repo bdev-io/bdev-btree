@@ -46,6 +46,7 @@ pub use func::init;
 pub(crate) mod global;
 mod func;
 pub(crate) mod constant;
+mod traits;
 
 // INFO : Test
 #[cfg(test)]
@@ -54,7 +55,7 @@ mod tests {
 
   // HACK : This is a hack to make sure test success.
   #[allow(clippy::assertions_on_constants)]
-  #[tokio::test]
+  #[tokio::test(flavor = "current_thread")]
   async fn test_logging() {
     #[cfg(feature = "logging")]
     {

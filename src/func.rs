@@ -1,4 +1,4 @@
-use super::global::{ GLOBAL_DEGREE, GLOBAL_DEGREE_INITIALIZED };
+use super::global::{ GLOBAL_DEGREE, GLOBAL_DEGREE_INITIALIZED, GLOBAL_DATA_SIZE };
 // NOTE : Hackable Degree
 
 /// ## Functions for B-Tree
@@ -16,7 +16,15 @@ use super::global::{ GLOBAL_DEGREE, GLOBAL_DEGREE_INITIALIZED };
 /// btree::init(3);
 /// ```
 ///
-pub fn init(degree: usize) {
+
+pub fn init<T: Sized>(degree: usize) {
+  let data_size: usize = std::mem::size_of::<T>();
+  if data_size == 0 {
+    panic!("Data Size is 0");
+  }
+
+  debug!("Data Size : {}", data_size);
+
   let is_initialized = GLOBAL_DEGREE_INITIALIZED.load(std::sync::atomic::Ordering::SeqCst);
   if is_initialized {
     panic!("B-Tree is already initialized.\nB-Tree가 이미 초기화 된 상태입니다.");
@@ -25,6 +33,8 @@ pub fn init(degree: usize) {
   }
 
   GLOBAL_DEGREE.store(degree, std::sync::atomic::Ordering::SeqCst);
+  GLOBAL_DEGREE_INITIALIZED.store(true, std::sync::atomic::Ordering::SeqCst);
+  GLOBAL_DATA_SIZE.store(data_size, std::sync::atomic::Ordering::SeqCst);
 }
 
 // INFO : TEST
@@ -32,20 +42,29 @@ pub fn init(degree: usize) {
 #[cfg(test)]
 mod tests {
   use super::*;
-  #[tokio::test]
+  #[tokio::test(flavor = "current_thread")]
   async fn test_init() {
     // DOC : This Init Test will execute latest
-    tokio::time::sleep_until(tokio::time::Instant::now() + std::time::Duration::from_millis(1000)).await;
-    init(3);
+    init::<usize>(3);
     assert_eq!(GLOBAL_DEGREE.load(std::sync::atomic::Ordering::SeqCst), 3);
+    crate::global::reset_global();
   }
 
-  #[tokio::test]
+  #[tokio::test(flavor = "current_thread")]
+  async fn test_even_init() {
+    // DOC : Re init Must Be Panic
+    let result = std::panic::catch_unwind(|| init::<u64>(4));
+    assert!(result.is_err());
+    crate::global::reset_global();
+  }
+
+  #[tokio::test(flavor = "current_thread")]
   async fn test_re_init() {
     // DOC : Re init Must Be Panic
-    tokio::time::sleep_until(tokio::time::Instant::now() + std::time::Duration::from_millis(2000)).await;
-    let result = std::panic::catch_unwind(|| init(4));
+    init::<u64>(3);
+    let result = std::panic::catch_unwind(|| init::<u64>(3));
     assert!(result.is_err());
+    crate::global::reset_global();
   }
 }
 
