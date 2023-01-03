@@ -11,12 +11,13 @@ crate-type = ["rlib"]
 
 [features]
 default = []
+logging = ["dep:log"]
 
 [dependencies]
 dotenv = "0"
 chrono = { version = "0", features = ["serde"] }
 chrono-tz = "0"
-log = "0"
+log = { version = "0", optional = true }
 tokio = { version = "1", features = ["full"] }
 tokio-util = { version = "0", optional = true }
 futures= { version = "0" }
