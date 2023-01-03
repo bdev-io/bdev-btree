@@ -39,7 +39,11 @@ pub use func::init;
 
 /// DOC : ================================
 
+/// DOC : PUBLIC TRAIT RE EXPORT HERE
 
+pub use traits::external::BTreeDataTrait;
+
+/// DOC : ===========================
 
 
 // INFO : Module

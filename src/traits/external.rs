@@ -29,7 +29,7 @@
 //! }
 //! ```
 //!
-trait BTreeDataTrait {
+pub trait BTreeDataTrait {
   /// DOC : This Function Will Called, When B-Tree Need Data Size
   fn get_byte_size(&self) -> usize;
   /// DOC : This Function Will Called, When B-Tree Need Data Raw Bytes
