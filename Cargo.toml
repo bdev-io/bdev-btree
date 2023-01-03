@@ -1,0 +1,23 @@
+[package]
+name = "btree"
+version = "0.1.0"
+edition = "2021"
+description = "BTree implementation in Rust [DISK IO, ASYNC] DEP: tokio, lazy_static"
+authors = ["KuuwangE <root@ql.gl>"]
+repository = "https://github.com/bdev-io/bdev-btree"
+
+[lib]
+crate-type = ["rlib"]
+
+[features]
+default = []
+
+[dependencies]
+dotenv = "0"
+chrono = { version = "0", features = ["serde"] }
+chrono-tz = "0"
+log = "0"
+tokio = { version = "1", features = ["full"] }
+tokio-util = { version = "0", optional = true }
+futures= { version = "0" }
+lazy_static = "1"
