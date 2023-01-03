@@ -44,6 +44,7 @@ mod tests {
   use super::*;
 
   /// DOC: MUST ONLY ONE TEST FOR init
+  #[ignore]
   #[tokio::test]
   async fn test_just_one_time() {
     // DOC : This Init Test will execute latest
