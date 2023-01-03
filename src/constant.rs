@@ -9,11 +9,10 @@ pub const B_HEADER_SIZE: usize = BUFFER_FACTOR * 2;
 mod tests {
   use super::*;
 
+  /// DOC : MUST READ TEST ONLY ON OTHER MODULE ( GLOBAL )
   #[tokio::test(flavor = "current_thread")]
   async fn test_degree() {
-    B_DEGREE.store(4, std::sync::atomic::Ordering::Relaxed);
     assert!(B_DEGREE.load(std::sync::atomic::Ordering::Relaxed) > 0);
-    B_DEGREE.store(3, std::sync::atomic::Ordering::Relaxed);
   }
 }
 

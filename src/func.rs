@@ -42,29 +42,23 @@ pub fn init<T: Sized>(degree: usize) {
 #[cfg(test)]
 mod tests {
   use super::*;
-  #[tokio::test(flavor = "current_thread")]
-  async fn test_init() {
+
+  /// DOC: MUST ONLY ONE TEST FOR init
+  #[tokio::test]
+  async fn test_just_one_time() {
     // DOC : This Init Test will execute latest
     init::<usize>(3);
     assert_eq!(GLOBAL_DEGREE.load(std::sync::atomic::Ordering::SeqCst), 3);
-    crate::global::reset_global();
-  }
 
-  #[tokio::test(flavor = "current_thread")]
-  async fn test_even_init() {
-    // DOC : Re init Must Be Panic
     let result = std::panic::catch_unwind(|| init::<u64>(4));
     assert!(result.is_err());
-    crate::global::reset_global();
-  }
 
-  #[tokio::test(flavor = "current_thread")]
-  async fn test_re_init() {
-    // DOC : Re init Must Be Panic
-    init::<u64>(3);
     let result = std::panic::catch_unwind(|| init::<u64>(3));
     assert!(result.is_err());
-    crate::global::reset_global();
+
+    GLOBAL_DEGREE_INITIALIZED.store(false, std::sync::atomic::Ordering::SeqCst);
+    GLOBAL_DATA_SIZE.store(0, std::sync::atomic::Ordering::SeqCst);
+    GLOBAL_DEGREE.store(0, std::sync::atomic::Ordering::SeqCst);
   }
 }
 
