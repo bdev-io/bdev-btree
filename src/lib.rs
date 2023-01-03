@@ -14,7 +14,17 @@
 //! - [x] B-Tree with a controllable degree
 //! - [x] Translated to
 //! - [x] Enable Logging Feature
-
+//!
+//! ## Must Do
+//! 
+//! You Must Implement [`BTreeDataTrait`] for your data structure.
+//! Look at [`BTreeDataTrait`] for more information.
+//!
+//! [`BTreeDataTrait`]: crate::traits::external::BTreeDataTrait
+//! 
+//! To Start Using This Package, Using [`init`] functions.
+//!
+//! [`init`]: crate::func::init
 #[cfg(all(not(test), feature = "logging"))]
 #[allow(unused_imports)] #[macro_use] extern crate log;
 

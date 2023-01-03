@@ -1,9 +1,10 @@
-use super::global::{ GLOBAL_DEGREE, GLOBAL_DEGREE_INITIALIZED, GLOBAL_DATA_SIZE };
+use crate::traits::external::BTreeDataTrait;
+use super::global::{ GLOBAL_DEGREE, GLOBAL_DEGREE_INITIALIZED, GLOBAL_DATA_SIZE  };
 // NOTE : Hackable Degree
 
 /// ## Functions for B-Tree
 /// 
-/// ### `init()`
+/// ### `init::<Type: Sized + ()`
 /// 
 /// Initialize the B-Tree
 ///
@@ -13,11 +14,18 @@ use super::global::{ GLOBAL_DEGREE, GLOBAL_DEGREE_INITIALIZED, GLOBAL_DATA_SIZE 
 /// # Example
 ///
 /// ```
-/// btree::init(3);
+/// btree<u64>::init(3);
+/// // OR ~
+/// btree<u32>::init(3);
+/// // OR ~
+/// btree<usize>::init(3);
+/// // OR ~
+/// btree<i32>::init(3);
 /// ```
 ///
-pub fn init<T: Sized>(degree: usize) {
-  let data_size: usize = std::mem::size_of::<T>();
+pub fn init<T: BTreeDataTrait>(degree: usize) {
+  let x = T::default();
+  let data_size: usize = x.get_byte_size();
   if data_size == 0 {
     panic!("Data Size is 0");
   }
