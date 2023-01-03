@@ -16,7 +16,6 @@ use super::global::{ GLOBAL_DEGREE, GLOBAL_DEGREE_INITIALIZED, GLOBAL_DATA_SIZE 
 /// btree::init(3);
 /// ```
 ///
-
 pub fn init<T: Sized>(degree: usize) {
   let data_size: usize = std::mem::size_of::<T>();
   if data_size == 0 {
