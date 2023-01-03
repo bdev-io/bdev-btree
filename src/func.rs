@@ -3,7 +3,6 @@ use super::global::{ GLOBAL_DEGREE, GLOBAL_DEGREE_INITIALIZED };
 
 /// ## Functions for B-Tree
 /// 
-
 /// ### `init()`
 /// 
 /// Initialize the B-Tree
@@ -12,9 +11,11 @@ use super::global::{ GLOBAL_DEGREE, GLOBAL_DEGREE_INITIALIZED };
 /// * `return` : None
 ///
 /// # Example
+///
 /// ```
 /// btree::init(3);
 /// ```
+///
 pub fn init(degree: usize) {
   let is_initialized = GLOBAL_DEGREE_INITIALIZED.load(std::sync::atomic::Ordering::SeqCst);
   if is_initialized {
