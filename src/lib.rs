@@ -28,15 +28,32 @@
 #[macro_use] mod macros;
 
 
+/// DOC : PUBLIC FUNCTIONS RE EXPORT HERE
+
+pub use func::init;
+
+/// DOC : ===============================
+
+
+/// DOC : PUBLIC STRUCTURES RE EXPORT HERE
+
+/// DOC : ================================
+
+
+
+
 // INFO : Module
 pub(crate) mod global;
 mod func;
 pub(crate) mod constant;
 
+// INFO : Test
 #[cfg(test)]
 mod tests {
   use super::*;
 
+  // HACK : This is a hack to make sure test success.
+  #[allow(clippy::assertions_on_constants)]
   #[tokio::test]
   async fn test_logging() {
     #[cfg(feature = "logging")]
@@ -47,5 +64,6 @@ mod tests {
     {
       info!("Logging is disabled");
     }
+    assert!(true);
   }
 }

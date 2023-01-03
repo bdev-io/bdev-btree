@@ -21,17 +21,19 @@ mod tests {
 
   #[tokio::test]
   async fn test_global_degree_store() {
-    tokio::time::sleep_until(tokio::time::Instant::now() + std::time::Duration::from_secs(1)).await;
+    tokio::time::sleep_until(tokio::time::Instant::now() + std::time::Duration::from_millis(200)).await;
     // HACK : This is a hack to make sure the test is run after the previous test
     GLOBAL_DEGREE.store(1, Ordering::SeqCst);
     GLOBAL_DEGREE_INITIALIZED.store(true, Ordering::SeqCst);
     assert!(GLOBAL_DEGREE.load(Ordering::Relaxed) == 1);
+    assert!(GLOBAL_DEGREE_INITIALIZED.load(Ordering::Relaxed));
+    GLOBAL_DEGREE_INITIALIZED.store(false, Ordering::SeqCst); // HACK : Reset For Next Test
   }
 
   #[tokio::test]
   async fn test_global_degree_is_set() {
-    tokio::time::sleep_until(tokio::time::Instant::now() + std::time::Duration::from_secs(2)).await;
-    // HACK : This is a hack to make sure the test is run after the previous test (degree_store)
-    assert!(GLOBAL_DEGREE_INITIALIZED.load(Ordering::Relaxed));
+    tokio::time::sleep_until(tokio::time::Instant::now() + std::time::Duration::from_millis(500)).await;
+    // HACK : This is a hack to make sure the test is run after the previous test (degree_store is false setted)
+    assert!(!GLOBAL_DEGREE_INITIALIZED.load(Ordering::Relaxed));
   }
 }

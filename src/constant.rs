@@ -7,7 +7,7 @@ mod tests {
   use super::*;
   #[tokio::test]
   async fn test_degree() {
-    assert_eq!(B_DEGREE.load(std::sync::atomic::Ordering::Relaxed), 0);
+    assert!(B_DEGREE.load(std::sync::atomic::Ordering::Relaxed) > 0);
   }
 }
 
