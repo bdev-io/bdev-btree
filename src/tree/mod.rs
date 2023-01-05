@@ -2,6 +2,7 @@
 //!
 //! B-Tree Data Structure is a generic data structure.
 use super::BTreeGeneralTypeTrait;
+
 pub struct BTree<K,V> where K: BTreeGeneralTypeTrait + Ord, V: BTreeGeneralTypeTrait {
   _k: std::marker::PhantomData<K>,
   _d: std::marker::PhantomData<V>,

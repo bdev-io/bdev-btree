@@ -29,44 +29,48 @@
 //!
 //! [`BTree`]: crate::tree::BTree
 //! [`init`]: crate::func::init
-#[cfg(all(not(test), feature = "logging"))]
-#[allow(unused_imports)] #[macro_use] extern crate log;
 
-#[cfg(all(test, feature = "logging"))]
-#[macro_use] mod macros;
+// DOC : CONDITIONAL MACROS
+  #[cfg(all(not(test), feature = "logging"))]
+  #[allow(unused_imports)] #[macro_use] extern crate log;
 
-#[cfg(all(test, not(feature = "logging")))]
-#[macro_use] mod macros;
+  #[cfg(all(test, feature = "logging"))]
+  #[macro_use] mod macros;
 
-#[cfg(all(not(test), not(feature = "logging")))]
-#[macro_use] mod macros;
+  #[cfg(all(test, not(feature = "logging")))]
+  #[macro_use] mod macros;
 
+  #[cfg(all(not(test), not(feature = "logging")))]
+  #[macro_use] mod macros;
 
-/// DOC : PUBLIC FUNCTIONS RE EXPORT HERE
-
-pub use func::init;
-
-/// DOC : ===============================
+// ==========================
 
 
-/// DOC : PUBLIC STRUCTURES RE EXPORT HERE
+// DOC : RE-EXPORTS
 
-/// DOC : ================================
+  pub use func::init;
 
-/// DOC : PUBLIC TRAIT RE EXPORT HERE
+  pub use traits::external::BTreeGeneralTypeTrait;
 
-pub use traits::external::BTreeGeneralTypeTrait;
-/// DOC : ===========================
+// ================
 
 
-// INFO : Module
-pub(crate) mod global;
-mod func;
-pub(crate) mod constant;
-mod traits;
-mod tree;
 
-// INFO : Test
+
+
+
+// DOC : MODULES
+  pub(crate) mod global;
+  mod func;
+  pub(crate) mod constant;
+  mod traits;
+  mod tree;
+// ==============
+
+
+
+
+
 #[cfg(test)]
 mod tests {
   use super::*;
