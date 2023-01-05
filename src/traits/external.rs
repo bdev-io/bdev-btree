@@ -10,10 +10,10 @@
 //!   y: u32,
 //! } // INFO : This will be DATA STRUCTURE
 //!
-//! use btree::traits::BTreeGeneralTypeTrait;
+//! use btree::BTreeGeneralTypeTrait;
 //! impl BTreeGeneralTypeTrait for MyBTreeData {
 //!   fn get_byte_size(&self) -> usize {
-//!     self.to_le_bytes().len()
+//!     self.to_raw_bytes().len()
 //!   }
 //!   fn to_raw_bytes(&self) -> Vec<u8> {
 //!     let mut bytes = Vec::new();
@@ -21,7 +21,7 @@
 //!     bytes.extend_from_slice(&self.y.to_le_bytes());
 //!     bytes
 //!   }
-//!   fn from_bytes(bytes: &[u8]) -> Self {
+//!   fn from_raw_bytes(bytes: &[u8]) -> Self {
 //!     let x = u32::from_le_bytes(bytes[0..4].try_into().unwrap());
 //!     let y = u32::from_le_bytes(bytes[4..8].try_into().unwrap());
 //!     Self { x, y }
@@ -73,7 +73,8 @@ mod tests {
   async fn test_int_trait_impl() {
     let x = 10u32;
     assert_eq!(x.get_byte_size(), 4);
-    assert_eq!(x.to_raw_bytes(), vec![0, 0, 0, 10]);
+    // WARN : Be careful!, .to_raw_bytes() will return Little Endian Bytes!
+    assert_eq!(x.to_raw_bytes(), vec![10, 0, 0, 0]);
     assert_eq!(u32::from_raw_bytes(&x.to_raw_bytes()), 10);
   }
 
