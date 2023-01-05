@@ -13,17 +13,17 @@
 //! use btree::traits::BTreeGeneralTypeTrait;
 //! impl BTreeGeneralTypeTrait for MyBTreeData {
 //!   fn get_byte_size(&self) -> usize {
-//!     self.to_be_bytes().len()
+//!     self.to_le_bytes().len()
 //!   }
 //!   fn to_raw_bytes(&self) -> Vec<u8> {
 //!     let mut bytes = Vec::new();
-//!     bytes.extend_from_slice(&self.x.to_be_bytes());
-//!     bytes.extend_from_slice(&self.y.to_be_bytes());
+//!     bytes.extend_from_slice(&self.x.to_le_bytes());
+//!     bytes.extend_from_slice(&self.y.to_le_bytes());
 //!     bytes
 //!   }
 //!   fn from_bytes(bytes: &[u8]) -> Self {
-//!     let x = u32::from_be_bytes(bytes[0..4].try_into().unwrap());
-//!     let y = u32::from_be_bytes(bytes[4..8].try_into().unwrap());
+//!     let x = u32::from_le_bytes(bytes[0..4].try_into().unwrap());
+//!     let y = u32::from_le_bytes(bytes[4..8].try_into().unwrap());
 //!     Self { x, y }
 //!   }
 //! }
@@ -49,15 +49,15 @@ macro_rules! int_trait_impl {
     impl $name for $t {
       #[inline]
       fn get_byte_size(&self) -> usize {
-        self.to_be_bytes().len()
+        self.to_le_bytes().len()
       }
       #[inline]
       fn to_raw_bytes(&self) -> Vec<u8> {
-        self.to_be_bytes().to_vec()
+        self.to_le_bytes().to_vec()
       }
       #[inline]
       fn from_raw_bytes(raw: &[u8]) -> Self {
-        Self::from_be_bytes(raw.try_into().unwrap())
+        Self::from_le_bytes(raw.try_into().unwrap())
       }
     }
   )*)
@@ -87,17 +87,17 @@ mod tests {
 
     impl BTreeGeneralTypeTrait for MyBTreeData {
       fn get_byte_size(&self) -> usize {
-        (u32::default().to_be_bytes().len()) * 2
+        (u32::default().to_le_bytes().len()) * 2
       }
       fn to_raw_bytes(&self) -> Vec<u8> {
         let mut bytes = Vec::new();
-        bytes.extend_from_slice(&self.x.to_be_bytes());
-        bytes.extend_from_slice(&self.y.to_be_bytes());
+        bytes.extend_from_slice(&self.x.to_le_bytes());
+        bytes.extend_from_slice(&self.y.to_le_bytes());
         bytes
       }
       fn from_raw_bytes(raw: &[u8]) -> Self {
-        let x = u32::from_be_bytes(raw[0..4].try_into().unwrap());
-        let y = u32::from_be_bytes(raw[4..8].try_into().unwrap());
+        let x = u32::from_le_bytes(raw[0..4].try_into().unwrap());
+        let y = u32::from_le_bytes(raw[4..8].try_into().unwrap());
         Self { x, y }
       }
     }
