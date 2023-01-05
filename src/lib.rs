@@ -24,6 +24,10 @@
 //! 
 //! To Start Using This Package, Using [`init`] functions.
 //!
+//! ## B-Tree Data-Structure
+//! Look at [`BTree`] for more information
+//!
+//! [`BTree`]: crate::tree::BTree
 //! [`init`]: crate::func::init
 #[cfg(all(not(test), feature = "logging"))]
 #[allow(unused_imports)] #[macro_use] extern crate log;
@@ -60,6 +64,7 @@ pub(crate) mod global;
 mod func;
 pub(crate) mod constant;
 mod traits;
+mod tree;
 
 // INFO : Test
 #[cfg(test)]

@@ -1,5 +1,6 @@
 use crate::traits::external::BTreeGeneralTypeTrait;
 use super::global::{ GLOBAL_DEGREE, GLOBAL_DEGREE_INITIALIZED, GLOBAL_DATA_SIZE  };
+use super::tree::BTree;
 // NOTE : Hackable Degree
 
 /// ## Functions for B-Tree
@@ -23,7 +24,7 @@ use super::global::{ GLOBAL_DEGREE, GLOBAL_DEGREE_INITIALIZED, GLOBAL_DATA_SIZE 
 /// btree<i32>::init(3);
 /// ```
 ///
-pub fn init<K: BTreeGeneralTypeTrait, T: BTreeGeneralTypeTrait>(degree: usize) {
+pub fn init<K: BTreeGeneralTypeTrait + Ord, T: BTreeGeneralTypeTrait>(degree: usize) -> BTree<K, T> {
   let key = K::default();
   let data = T::default();
 
@@ -42,9 +43,7 @@ pub fn init<K: BTreeGeneralTypeTrait, T: BTreeGeneralTypeTrait>(degree: usize) {
     panic!("Degree must be greater or equal than 2 and odd Number\n차수는 2 이상이여야 하며 홀수여야 합니다.");
   }
 
-  GLOBAL_DEGREE.store(degree, std::sync::atomic::Ordering::SeqCst);
-  GLOBAL_DEGREE_INITIALIZED.store(true, std::sync::atomic::Ordering::SeqCst);
-  GLOBAL_DATA_SIZE.store(data_size, std::sync::atomic::Ordering::SeqCst);
+  BTree::new::<K, T>(degree);
 }
 
 // INFO : TEST
@@ -58,13 +57,13 @@ mod tests {
   #[tokio::test]
   async fn test_just_one_time() {
     // DOC : This Init Test will execute latest
-    init::<usize>(3);
+    init::<usize, usize>(3);
     assert_eq!(GLOBAL_DEGREE.load(std::sync::atomic::Ordering::SeqCst), 3);
 
-    let result = std::panic::catch_unwind(|| init::<u64>(4));
+    let result = std::panic::catch_unwind(|| init::<usize, u64>(4));
     assert!(result.is_err());
 
-    let result = std::panic::catch_unwind(|| init::<u64>(3));
+    let result = std::panic::catch_unwind(|| init::<usize, u64>(3));
     assert!(result.is_err());
 
     GLOBAL_DEGREE_INITIALIZED.store(false, std::sync::atomic::Ordering::SeqCst);
