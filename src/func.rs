@@ -1,4 +1,4 @@
-use crate::traits::external::BTreeDataTrait;
+use crate::traits::external::BTreeGeneralTypeTrait;
 use super::global::{ GLOBAL_DEGREE, GLOBAL_DEGREE_INITIALIZED, GLOBAL_DATA_SIZE  };
 // NOTE : Hackable Degree
 
@@ -23,11 +23,14 @@ use super::global::{ GLOBAL_DEGREE, GLOBAL_DEGREE_INITIALIZED, GLOBAL_DATA_SIZE 
 /// btree<i32>::init(3);
 /// ```
 ///
-pub fn init<T: BTreeDataTrait>(degree: usize) {
-  let x = T::default();
-  let data_size: usize = x.get_byte_size();
-  if data_size == 0 {
-    panic!("Data Size is 0");
+pub fn init<K: BTreeGeneralTypeTrait, T: BTreeGeneralTypeTrait>(degree: usize) {
+  let key = K::default();
+  let data = T::default();
+
+  let key_size: usize = key.get_byte_size();
+  let data_size: usize = data.get_byte_size();
+  if data_size == 0 || key_size == 0 {
+    panic!("Data OR Key Size is 0");
   }
 
   debug!("Data Size : {}", data_size);

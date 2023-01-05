@@ -17,10 +17,10 @@
 //!
 //! ## Must Do
 //! 
-//! You Must Implement [`BTreeDataTrait`] for your data structure.
-//! Look at [`BTreeDataTrait`] for more information.
+//! You Must Implement [`BTreeGeneralTypeTrait`] for your key/data structure.
+//! Look at [`BTreeGeneralTypeTrait`] for more information.
 //!
-//! [`BTreeDataTrait`]: crate::traits::external::BTreeDataTrait
+//! [`BTreeGeneralTypeTrait`]: crate::traits::external::BTreeGeneralTypeTrait
 //! 
 //! To Start Using This Package, Using [`init`] functions.
 //!
@@ -51,8 +51,7 @@ pub use func::init;
 
 /// DOC : PUBLIC TRAIT RE EXPORT HERE
 
-pub use traits::external::BTreeDataTrait;
-
+pub use traits::external::BTreeGeneralTypeTrait;
 /// DOC : ===========================
 
 

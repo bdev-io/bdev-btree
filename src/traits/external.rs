@@ -10,8 +10,8 @@
 //!   y: u32,
 //! } // INFO : This will be DATA STRUCTURE
 //!
-//! use btree::traits::BTreeDataTrait;
-//! impl BTreeDataTrait for MyBTreeData {
+//! use btree::traits::BTreeGeneralTypeTrait;
+//! impl BTreeGeneralTypeTrait for MyBTreeData {
 //!   fn get_byte_size(&self) -> usize {
 //!     self.to_be_bytes().len()
 //!   }
@@ -34,7 +34,7 @@
 //! }
 //! ```
 //!
-pub trait BTreeDataTrait where Self: Default {
+pub trait BTreeGeneralTypeTrait where Self: Default {
   /// DOC : This Function Will Called, When B-Tree Need Data Size
   fn get_byte_size(&self) -> usize;
   /// DOC : This Function Will Called, When B-Tree Need Data Raw Bytes
@@ -63,7 +63,7 @@ macro_rules! int_trait_impl {
   )*)
 }
 
-int_trait_impl!(BTreeDataTrait for u8 u16 u32 u64 u128 i8 i16 i32 i64 i128 usize isize);
+int_trait_impl!(BTreeGeneralTypeTrait for u8 u16 u32 u64 u128 i8 i16 i32 i64 i128 usize isize);
 
 #[cfg(test)]
 mod tests {
@@ -85,7 +85,7 @@ mod tests {
       y: u32,
     }
 
-    impl BTreeDataTrait for MyBTreeData {
+    impl BTreeGeneralTypeTrait for MyBTreeData {
       fn get_byte_size(&self) -> usize {
         (u32::default().to_be_bytes().len()) * 2
       }
