@@ -1,5 +1,7 @@
 # BTree
 
+## Contributors
+`./githooks/install.sh` for githook test
 
 
 ## TODO
