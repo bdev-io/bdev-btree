@@ -4,7 +4,7 @@
 # Coded by: KuuwangE < root@ql.gl > 
 #
 
-PROJECT_DIR=$(dirname `dirname $(`dirname $(realpath $0)`)`)
+PROJECT_DIR=$(dirname `dirname $(realpath $0)`)
 # HACK : This is Hacky Way to Get Project ABSOLUTE PATH Based On CURRENT FILE
 
 # $PROJECT_DIR/bin/test_script.sh
