@@ -2,11 +2,10 @@
 //!
 //! B-Tree Data Structure is a generic data structure.
 use super::BTreeGeneralTypeTrait;
+use node::BNode;
 
 pub struct BTree<K,V> where K: BTreeGeneralTypeTrait + Ord, V: BTreeGeneralTypeTrait {
-  _k: std::marker::PhantomData<K>,
-  _d: std::marker::PhantomData<V>,
-
+  root: BNode<K, V>,
   // DOC : === B-Tree Properties ===
 
     // DOC: AUTO_CALCULATED AREA
