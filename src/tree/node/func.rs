@@ -1,9 +1,12 @@
+use std::clone;
 use std::marker::PhantomData;
+use std::pin::Pin;
 use super::{ BTreeGeneralTypeTrait, BNode };
 use std::io::Result;
 
 
-impl<K, V> BNode<K, V> where K: BTreeGeneralTypeTrait + Ord, V: BTreeGeneralTypeTrait {
+
+impl<K, V> BNode<K, V> where K: BTreeGeneralTypeTrait + Ord + Clone, V: BTreeGeneralTypeTrait + Clone {
   pub fn new(degree: usize) -> Self {
     let keys = {
       let mut keys = Vec::with_capacity(degree);
@@ -71,7 +74,17 @@ impl<K, V> BNode<K, V> where K: BTreeGeneralTypeTrait + Ord, V: BTreeGeneralType
     Ok(())
   }
 
-  pub async fn search(&mut self, key: K, value: V) -> Result<()> {
+  pub async fn search_leaf(&mut self, key: K) -> Result<()> {
+    let mut ex_stack: Vec<(BNode<K, V>, usize)> = vec![]; // TYPE : 순환 탐색을 위한 스택, (Node, index)
+    let mut cur_node = self.clone();
+    ex_stack.push((cur_node, 0));
+
+
+
+    Ok(())
+  }
+
+  pub async fn search(&mut self, key: K) -> Result<()> {
     Ok(())
   }
 
@@ -123,7 +136,7 @@ mod tests {
   #[tokio::test]
   async fn test_bnode_search() {
     let mut bnode = BNode::<u64, u64>::new(5);
-    assert!(bnode.search(1, 1).await.is_ok());
+    assert!(bnode.search(1).await.is_ok());
   }
 
   #[tokio::test]

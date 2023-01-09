@@ -34,7 +34,7 @@
 //! }
 //! ```
 //!
-pub trait BTreeGeneralTypeTrait where Self: Default {
+pub trait BTreeGeneralTypeTrait where Self: Default + Clone {
   /// DOC : This Function Will Called, When B-Tree Need Data Size
   fn get_byte_size(&self) -> usize;
   /// DOC : This Function Will Called, When B-Tree Need Data Raw Bytes
@@ -80,7 +80,7 @@ mod tests {
 
   #[tokio::test]
   async fn test_trait_implement_my_custom_struct() {
-    #[derive(Default)]
+    #[derive(Default, Clone)]
     struct MyBTreeData {
       x: u32,
       y: u32,

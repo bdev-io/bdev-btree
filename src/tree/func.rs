@@ -1,7 +1,7 @@
 use super::{ BTree, node::BNode, BTreeGeneralTypeTrait};
 use crate::constant::DISK_BLOCK_SIZE;
 
-impl<K,V> BTree<K, V> where K: BTreeGeneralTypeTrait + Ord, V: BTreeGeneralTypeTrait
+impl<K,V> BTree<K, V> where K: BTreeGeneralTypeTrait + Ord + Clone, V: BTreeGeneralTypeTrait + Clone
 {
   pub fn new(btree_degree: usize, sizeof_key: usize, sizeof_data: usize) -> Self {
     // let header_size = {
@@ -47,6 +47,12 @@ impl<K,V> BTree<K, V> where K: BTreeGeneralTypeTrait + Ord, V: BTreeGeneralTypeT
 
   pub async fn insert(&mut self, key: K, data: V) {
     println!("BTree::insert() is called.");
+    // TODO : 1. leaf node to insert
+    
+    // TODO : 2. find best position (key index) to insert
+    // TODO : 3. insert key & data
+    // TODO : 4. check have to split?
+    // TODO : 5. split!
   }
 
   pub async fn delete(&mut self, key: K) {

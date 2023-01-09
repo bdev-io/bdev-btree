@@ -1,7 +1,8 @@
 use std::marker::PhantomData;
 use super::BTreeGeneralTypeTrait;
 
-pub struct BNode<K, V> where K: BTreeGeneralTypeTrait + Ord, V: BTreeGeneralTypeTrait {
+#[derive(Clone)]
+pub struct BNode<K, V> where K: BTreeGeneralTypeTrait + Ord + Clone, V: BTreeGeneralTypeTrait + Clone {
   pub(crate) is_leaf: bool,
   pub(crate) key_count: usize,
   pub(crate) keys: Box<[K]>, // NOTE : DEGREE

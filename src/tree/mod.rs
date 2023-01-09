@@ -4,7 +4,8 @@
 use super::BTreeGeneralTypeTrait;
 use node::BNode;
 
-pub struct BTree<K,V> where K: BTreeGeneralTypeTrait + Ord, V: BTreeGeneralTypeTrait {
+#[derive(Clone)]
+pub struct BTree<K,V> where K: BTreeGeneralTypeTrait + Ord + Clone, V: BTreeGeneralTypeTrait + Clone {
   root: BNode<K, V>,
   // DOC : === B-Tree Properties ===
 
