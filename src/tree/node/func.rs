@@ -26,6 +26,18 @@ impl<K, V> BNode<K, V> where K: BTreeGeneralTypeTrait + Ord + Clone, V: BTreeGen
     }
   }
 
+  pub fn node_print(&self) {
+    println!("\n[DATA_OFFSETS: {:?}]\n", self.data_offsets);
+    println!("- IS_LEAF: {}", self.is_leaf);
+    println!("- KEY_COUNT: {}", self.key_count);
+    println!("- KEYS : ");
+    for i in 0..self.key_count {
+      println!("- KEYS[{}]: {:?}", i, self.keys[i]);
+    }
+    println!("- CHILD_OFFSETS: {:?}", self.child_offsets);
+    println!("- OFFSET: {:?}", self.offset);
+  }
+
 
   // DOC : 여기서는 각 NODE 들에서 시작되는 method 들에 대해 기록한다.
 
@@ -34,7 +46,7 @@ impl<K, V> BNode<K, V> where K: BTreeGeneralTypeTrait + Ord + Clone, V: BTreeGen
   // TODO : 3. search() 에서 호출되는 method 들을 작성한다.
   // TODO : 4. update() 에서 호출되는 method 들을 작성한다.
   // TODO : 5. traverse() 에서 호출되는 method 들을 작성한다.
-  // TODO : 6. print() 에서 호출되는 method 들을 작성한다.
+  // TODO : 6. node_print() 에서 호출되는 method 들을 작성한다.
 
   // TODO : search_best_leaf ( leaf node to insert )
   // TODO : search_key_position ( key position to insert )
@@ -62,7 +74,7 @@ mod tests {
     let bnode = BNode::<u64, u64>::new(3);
     assert!(bnode.is_leaf);
     assert!(bnode.keys.len() == 3);
-    println!("{:?}", bnode.keys);
+    bnode.node_print();
   }
 
   #[tokio::test]
@@ -70,6 +82,16 @@ mod tests {
     let bnode = BNode::<u64, u64>::new(5);
     assert!(bnode.is_leaf);
     assert!(bnode.keys.len() == 5);
-    println!("{:?}", bnode.keys);
+    bnode.node_print();
+  }
+
+  #[tokio::test]
+  async fn test_bnode_search_best_leaf() {
+    let mut bnode = BNode::<i64, i64>::new(3);
+    assert!(bnode.is_leaf);
+    assert!(bnode.keys.len() == 3);
+    let bnode_search_result = bnode.search_best_leaf(3).await.unwrap();
+    assert!(bnode_search_result.is_leaf == bnode.is_leaf);
+    bnode.node_print();
   }
 }

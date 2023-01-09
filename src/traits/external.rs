@@ -5,7 +5,7 @@
 //!
 //! ## Example for Other Structure
 //! ```rust
-//! #[derive(Clone)]
+//! #[derive(Clone, Debug)]
 //! struct MyBTreeData {
 //!   x: u32,
 //!   y: u32,
@@ -35,7 +35,9 @@
 //! }
 //! ```
 //!
-pub trait BTreeGeneralTypeTrait where Self: Default + Clone {
+
+use std::fmt::Debug;
+pub trait BTreeGeneralTypeTrait where Self: Default + Clone + Debug {
   /// DOC : This Function Will Called, When B-Tree Need Data Size
   fn get_byte_size(&self) -> usize;
   /// DOC : This Function Will Called, When B-Tree Need Data Raw Bytes
@@ -81,7 +83,7 @@ mod tests {
 
   #[tokio::test]
   async fn test_trait_implement_my_custom_struct() {
-    #[derive(Default, Clone)]
+    #[derive(Default, Clone, Debug)]
     struct MyBTreeData {
       x: u32,
       y: u32,

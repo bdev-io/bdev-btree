@@ -69,15 +69,15 @@ mod tests {
   #[tokio::test]
   async fn test_btree_insert() {
     let mut btree = BTree::<u64, u64>::new(3, 8, 8);
-    btree.insert(1, 1).await;
-    btree.print_onetime().await;
+    btree.insert(1, 1).await.unwrap();
+    btree.print_onetime().await.unwrap();
     assert!(btree.insert(1, 1).await.is_ok());
   }
 
   #[tokio::test]
   async fn test_btree_print() {
     let mut btree = BTree::<usize, u64>::new(3, 8, 8);
-    btree.insert(1, 1).await;
+    btree.insert(1, 1).await.unwrap();
     assert!(btree.print_onetime().await.is_ok());
   }
 
