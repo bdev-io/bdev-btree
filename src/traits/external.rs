@@ -5,6 +5,7 @@
 //!
 //! ## Example for Other Structure
 //! ```rust
+//! #[derive(Clone)]
 //! struct MyBTreeData {
 //!   x: u32,
 //!   y: u32,

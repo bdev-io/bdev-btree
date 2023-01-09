@@ -41,30 +41,6 @@ impl<K, V> BNode<K, V> where K: BTreeGeneralTypeTrait + Ord + Clone, V: BTreeGen
   // TODO : 6. print() 에서 호출되는 method 들을 작성한다.
 
 
-  pub fn is_full(&self) -> bool {
-    self.key_count == self.keys.len()
-  }
-
-  pub fn is_half_full(&self) -> bool {
-    self.key_count == self.keys.len() / 2
-  }
-
-
-  pub fn is_leaf(&self) -> bool {
-    self.is_leaf
-  }
-
-  pub fn is_not_leaf(&self) -> bool {
-    !self.is_leaf
-  }
-
-  pub fn set_leaf(&mut self) {
-    self.is_leaf = true;
-  }
-
-  pub fn set_not_leaf(&mut self) {
-    self.is_leaf = false;
-  }
 
   pub async fn insert(&mut self, key: K, value: V) -> Result<()> {
     Ok(())
@@ -74,14 +50,14 @@ impl<K, V> BNode<K, V> where K: BTreeGeneralTypeTrait + Ord + Clone, V: BTreeGen
     Ok(())
   }
 
-  pub async fn search_leaf(&mut self, key: K) -> Result<()> {
-    let mut ex_stack: Vec<(BNode<K, V>, usize)> = vec![]; // TYPE : 순환 탐색을 위한 스택, (Node, index)
-    let mut cur_node = self.clone();
-    ex_stack.push((cur_node, 0));
-
-
-
-    Ok(())
+  pub async fn search_leaf(&mut self, key: K) -> Result<Self> {
+    // let mut ex_stack: Vec<(BNode<K, V>, usize)> = vec![]; // TYPE : 순환 탐색을 위한 스택, (Node, index)
+    // let mut cur_node = self.clone();
+    // ex_stack.push((cur_node, 0));
+    if self.is_leaf {
+      return Ok(self.clone());
+    }
+    todo!("Not Implemented Yet");
   }
 
   pub async fn search(&mut self, key: K) -> Result<()> {
