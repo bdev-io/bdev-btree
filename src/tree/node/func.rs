@@ -1,10 +1,6 @@
-use std::clone;
 use std::marker::PhantomData;
-use std::pin::Pin;
 use super::{ BTreeGeneralTypeTrait, BNode };
 use std::io::Result;
-
-
 
 impl<K, V> BNode<K, V> where K: BTreeGeneralTypeTrait + Ord + Clone, V: BTreeGeneralTypeTrait + Clone {
   pub fn new(degree: usize) -> Self {
@@ -40,17 +36,12 @@ impl<K, V> BNode<K, V> where K: BTreeGeneralTypeTrait + Ord + Clone, V: BTreeGen
   // TODO : 5. traverse() 에서 호출되는 method 들을 작성한다.
   // TODO : 6. print() 에서 호출되는 method 들을 작성한다.
 
+  // TODO : search_best_leaf ( leaf node to insert )
+  // TODO : search_key_position ( key position to insert )
+  // TODO : split_tree ( split tree )
 
 
-  pub async fn insert(&mut self, key: K, value: V) -> Result<()> {
-    Ok(())
-  }
-
-  pub async fn delete(&mut self, key: K, value: V) -> Result<()> {
-    Ok(())
-  }
-
-  pub async fn search_leaf(&mut self, key: K) -> Result<Self> {
+  pub async fn search_best_leaf(&mut self, key: K) -> Result<Self> {
     // let mut ex_stack: Vec<(BNode<K, V>, usize)> = vec![]; // TYPE : 순환 탐색을 위한 스택, (Node, index)
     // let mut cur_node = self.clone();
     // ex_stack.push((cur_node, 0));
@@ -60,21 +51,6 @@ impl<K, V> BNode<K, V> where K: BTreeGeneralTypeTrait + Ord + Clone, V: BTreeGen
     todo!("Not Implemented Yet");
   }
 
-  pub async fn search(&mut self, key: K) -> Result<()> {
-    Ok(())
-  }
-
-  pub async fn update(&mut self, key: K, value: V) -> Result<()> {
-    Ok(())
-  }
-
-  pub async fn traverse(&mut self, key: K, value: V) -> Result<()> {
-    Ok(())
-  }
-
-  pub async fn print(&mut self, key: K, value: V) -> Result<()> {
-    Ok(())
-  }
 }
 
 #[cfg(test)]
@@ -95,41 +71,5 @@ mod tests {
     assert!(bnode.is_leaf);
     assert!(bnode.keys.len() == 5);
     println!("{:?}", bnode.keys);
-  }
-
-  #[tokio::test]
-  async fn test_bnode_insert() {
-    let mut bnode = BNode::<u64, u64>::new(5);
-    assert!(bnode.insert(1, 1).await.is_ok());
-  }
-
-  #[tokio::test]
-  async fn test_bnode_delete() {
-    let mut bnode = BNode::<u64, u64>::new(5);
-    assert!(bnode.delete(1, 1).await.is_ok());
-  }
-
-  #[tokio::test]
-  async fn test_bnode_search() {
-    let mut bnode = BNode::<u64, u64>::new(5);
-    assert!(bnode.search(1).await.is_ok());
-  }
-
-  #[tokio::test]
-  async fn test_bnode_update() {
-    let mut bnode = BNode::<u64, u64>::new(5);
-    assert!(bnode.update(1, 1).await.is_ok());
-  }
-
-  #[tokio::test]
-  async fn test_bnode_traverse() {
-    let mut bnode = BNode::<u64, u64>::new(5);
-    assert!(bnode.traverse(1, 1).await.is_ok());
-  }
-
-  #[tokio::test]
-  async fn test_bnode_print() {
-    let mut bnode = BNode::<u64, u64>::new(5);
-    assert!(bnode.print(1, 1).await.is_ok());
   }
 }
