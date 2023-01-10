@@ -63,6 +63,40 @@ impl<K, V> BNode<K, V> where K: BTreeGeneralTypeTrait + Ord + Clone, V: BTreeGen
     todo!("Not Implemented Yet");
   }
 
+  pub async fn store_data(&mut self, data: V) -> Result<u64> {
+    // TODO : Store Data SomeWhere.
+    // todo!("Not Implemented Yet");
+    Ok(0)
+  }
+
+  pub async fn insert_key_data(&mut self, key: K, data: V) -> Result<()> {
+    let mut found_idx: i64 = -1;
+    for idx in 0..self.key_count {
+      if key < self.keys[idx] {
+        found_idx = idx as i64;
+        break;
+      }
+    }
+    if found_idx > -1 {
+      let found_idx: usize = found_idx as usize;
+      for ridx in found_idx..self.key_count {
+        self.keys[ridx + 1] = self.keys[ridx].clone();
+        self.data_offsets[ridx + 1] = self.data_offsets[ridx];
+      }
+      self.keys[found_idx] = key;
+      self.data_offsets[found_idx] = self.store_data(data).await?;
+    } else {
+      self.keys[self.key_count] = key;
+      self.data_offsets[self.key_count] = self.store_data(data).await?;
+    }
+
+    self.key_count += 1;
+
+    if self.key_count >= self.keys.len() {
+      todo!("SPLIT 해야해~");
+    }
+    Ok(())
+  }
 }
 
 #[cfg(test)]
@@ -92,6 +126,22 @@ mod tests {
     assert!(bnode.keys.len() == 3);
     let bnode_search_result = bnode.search_best_leaf(3).await.unwrap();
     assert!(bnode_search_result.is_leaf == bnode.is_leaf);
+    bnode.node_print();
+  }
+
+  #[tokio::test]
+  async fn test_bnode_insert_key_data() {
+    let mut bnode = BNode::<i64, i64>::new(3);
+    assert!(bnode.insert_key_data(3, 3).await.is_ok());
+    bnode.node_print();
+
+    assert!(bnode.insert_key_data(3, 3).await.is_ok());
+    bnode.node_print();
+
+    assert!(bnode.insert_key_data(3, 3).await.is_ok());
+    bnode.node_print();
+
+    assert!(bnode.insert_key_data(3, 3).await.is_ok());
     bnode.node_print();
   }
 }
