@@ -11,12 +11,8 @@ impl<K,V> BTree<K, V> where K: BTreeGeneralTypeTrait + Ord + Clone, V: BTreeGene
     let header_size = DISK_BLOCK_SIZE;
     let node_size = 0;
     let is_initialized: bool = false;
-    let root: BNode<K, V> = BNode::<K, V>::new(btree_degree);
-
-    // TODO : 1. 헤더 사이즈 계산
-    // TODO : 2. 노드 사이즈 계산
-    // TODO : 3. 초기화 여부 계산 ()
-
+    let mut root: BNode<K, V> = BNode::<K, V>::new(btree_degree);
+    root.parent_offset = Option::Some(0);
 
     Self {
       root,
