@@ -1,6 +1,6 @@
 use super::{ BTree, node::BNode, BTreeGeneralTypeTrait};
 use crate::constant::DISK_BLOCK_SIZE;
-use std::io::Result;
+use std::io::{Result, Write};
 use std::path::Path;
 
 impl<K,V> BTree<K, V> where K: BTreeGeneralTypeTrait + Ord + Clone, V: BTreeGeneralTypeTrait + Clone
@@ -24,7 +24,8 @@ impl<K,V> BTree<K, V> where K: BTreeGeneralTypeTrait + Ord + Clone, V: BTreeGene
       }
     }).join(tree_name).to_str().unwrap().to_string();
 
-    Self {
+
+    let r = Self {
       root,
 
         // DOC: AUTO_CALCULATED AREA
@@ -41,7 +42,49 @@ impl<K,V> BTree<K, V> where K: BTreeGeneralTypeTrait + Ord + Clone, V: BTreeGene
 
       key_type: std::marker::PhantomData::<K>,
       value_type: std::marker::PhantomData::<V>,
-    }
+    };
+    r.write_header();
+    r
+
+  }
+
+  pub fn write_header(&self) {
+    let file_path = Path::new(&self.root_path).join("index");
+    let mut file = std::fs::File::create(file_path).unwrap();
+    let mut buf = vec![0; self.header_size];
+    let mut offset = 0;
+    let mut write = |data: &[u8]| {
+      buf[offset..offset + data.len()].copy_from_slice(data);
+      offset += data.len();
+    };
+
+    write(&self.header_size.to_le_bytes());
+    write(&self.node_size.to_le_bytes());
+    write(&(self.is_initialized as u8).to_le_bytes());
+    write(&self.btree_degree.to_le_bytes());
+    write(&self.sizeof_key.to_le_bytes());
+    write(&self.sizeof_data.to_le_bytes());
+
+    file.write_all(&buf).unwrap();
+  }
+
+  pub fn load_header(&mut self) {
+    let file_path = Path::new(&self.root_path).join("index");
+    let mut file = std::fs::File::open(file_path).unwrap();
+    let mut buf = vec![0; self.header_size];
+    let mut offset = 0;
+    let mut read = |len: usize| {
+      let data = &buf[offset..offset + len];
+      offset += len;
+      data
+    };
+
+    self.header_size = u64::from_le_bytes(read(8).try_into().unwrap()) as usize;
+    self.node_size = u64::from_le_bytes(read(8).try_into().unwrap()) as usize;
+    self.is_initialized = u8::from_le_bytes(read(1).try_into().unwrap()) != 0;
+    self.btree_degree = usize::from_le_bytes(read(8).try_into().unwrap());
+    self.sizeof_key = usize::from_le_bytes(read(8).try_into().unwrap());
+    self.sizeof_data = usize::from_le_bytes(read(8).try_into().unwrap());
   }
 
   // DOC : 여기서는 ROOT NODE 로 부터 시작되는 method 들에 대해 기록한다.
