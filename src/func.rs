@@ -15,19 +15,20 @@ use super::tree::BTree;
 ///
 /// ```
 /// use btree::init;
-/// init::<i32, u64>(3);
+/// let tree_name = "test";
+/// init::<i32, u64>("i32tree", 3);
 /// // OR 
-/// init::<usize, i64>(3);
+/// init::<usize, i64>("tree2", 3);
 /// // OR 
-/// init::<u64, u64>(3);
+/// init::<u64, u64>("u64tree", 3);
 /// // OR 
-/// init::<usize, u64>(3);
+/// init::<usize, u64>("tree_test", 3);
 /// ```
 ///
 /// ## More Examples
 /// // TODO : Add More Examples
 ///
-pub fn init<K: BTreeGeneralTypeTrait + Ord, V: BTreeGeneralTypeTrait>(degree: usize) -> BTree<K, V> {
+pub fn init<K: BTreeGeneralTypeTrait + Ord, V: BTreeGeneralTypeTrait>(tree_name: &str, degree: usize) -> BTree<K, V> {
   let key = K::default();
   let data = V::default();
 
@@ -44,7 +45,7 @@ pub fn init<K: BTreeGeneralTypeTrait + Ord, V: BTreeGeneralTypeTrait>(degree: us
   //   panic!("Degree must be greater or equal than 2 and odd Number\n차수는 2 이상이여야 하며 홀수여야 합니다.");
   // }
 
-  BTree::<K,V>::new(degree, sizeof_key, sizeof_data)
+  BTree::<K,V>::new(tree_name, degree, sizeof_key, sizeof_data)
 }
 
 // INFO : TEST
@@ -58,7 +59,7 @@ mod tests {
   #[tokio::test]
   async fn test_just_one_time() {
     // DOC : This Init Test will execute latest
-    init::<usize, usize>(3);
+    init::<usize, usize>("test_just_one_time", 3);
   }
 }
 

@@ -1,18 +1,28 @@
 use super::{ BTree, node::BNode, BTreeGeneralTypeTrait};
 use crate::constant::DISK_BLOCK_SIZE;
 use std::io::Result;
+use std::path::Path;
 
 impl<K,V> BTree<K, V> where K: BTreeGeneralTypeTrait + Ord + Clone, V: BTreeGeneralTypeTrait + Clone
 {
-  pub fn new(btree_degree: usize, sizeof_key: usize, sizeof_data: usize) -> Self {
-    // let header_size = {
-    //   // DOC : B-Tree Header Size ( B-Tree 헤더 사이즈 )
-    // };
+  pub fn new(tree_name: &str, btree_degree: usize, sizeof_key: usize, sizeof_data: usize) -> Self {
     let header_size = DISK_BLOCK_SIZE;
     let node_size = 0;
     let is_initialized: bool = false;
     let mut root: BNode<K, V> = BNode::<K, V>::new(btree_degree);
     root.parent_offset = Option::Some(0);
+
+    let root_path = Path::new("stores").join({
+      if cfg!(debug_assertions) {
+        if cfg!(test) {
+          "test"
+        } else {
+          "debug"
+        }
+      } else {
+        "release"
+      }
+    }).join(tree_name).to_str().unwrap().to_string();
 
     Self {
       root,
@@ -23,7 +33,7 @@ impl<K,V> BTree<K, V> where K: BTreeGeneralTypeTrait + Ord + Clone, V: BTreeGene
         is_initialized,
         // DOC : =======================
 
-      root_path: String::new(),
+      root_path,
 
       btree_degree,
       sizeof_key,
@@ -58,13 +68,13 @@ mod tests {
 
   #[tokio::test]
   async fn test_btree_new() {
-    let btree = BTree::<u64, u64>::new(3, 8, 8);
+    let btree = BTree::<u64, u64>::new("TEST_TREE", 3, 8, 8);
     assert!(!btree.is_initialized);
   }
 
   #[tokio::test]
   async fn test_btree_insert() {
-    let mut btree = BTree::<u64, u64>::new(3, 8, 8);
+    let mut btree = BTree::<u64, u64>::new("TEST_TREE2",3, 8, 8);
     btree.insert(1, 1).await.unwrap();
     btree.print_onetime().await.unwrap();
     assert!(btree.insert(1, 1).await.is_ok());
@@ -72,7 +82,7 @@ mod tests {
 
   #[tokio::test]
   async fn test_btree_print() {
-    let mut btree = BTree::<usize, u64>::new(3, 8, 8);
+    let mut btree = BTree::<usize, u64>::new("TEST_TREE3", 3, 8, 8);
     btree.insert(1, 1).await.unwrap();
     assert!(btree.print_onetime().await.is_ok());
   }
